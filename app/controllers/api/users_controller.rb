@@ -53,6 +53,27 @@ class Api::UsersController < ApplicationController
       end
 
     end
+    
+    def search 
+      if params[:input].blank?
+          # render json: { msg: "Empty field!"}, status: :unprocessable_entity 
+          render json: { msg: "empty field!"}, status: :unprocessable_entity 
+      else  
+          @parameter = params[:input]
+          # render json: @parameter, status: :ok
+         if  @results = User.where(firstName: "#{@parameter}").to_a 
+          render json: @results, status: :ok
+         elsif @results = User.where(lastName: "#{@parameter}").to_a
+          render json: @results, status: :ok
+         elsif @results = User.where(email: "#{@parameter}").to_a
+          render json: @results, status: :ok
+         else
+          render json: { msg: "Not Found!"}, status: :unprocessable_entity  
+         end
+
+          # User.all.where("lower(firstName) LIKE :input",
+      end  
+  end
 
     private
     def userparams
